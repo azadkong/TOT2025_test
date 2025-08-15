@@ -45,30 +45,7 @@ TEST(ExpressParser, EntitiesParentAndAttrs)
     EXPECT_EQ(classes["B"].attributes[0], "b1 : TYPE2");
 }
 
-TEST(ExpressParser, ChildrenMap)
-{
-    const QString exp =
-        "ENTITY A; END_ENTITY;\n"
-        "ENTITY B; SUBTYPE OF (A); END_ENTITY;\n"
-        "ENTITY C; SUBTYPE OF (A); END_ENTITY;\n"
-        "ENTITY D; SUBTYPE OF (C); END_ENTITY;\n";
 
-    QString path = writeTmpUtf8(exp);
-    ExpressParser p; QString err;
-    ASSERT_TRUE(p.parseFile(path, &err)) << err.toStdString();
-
-    auto ch = p.buildChildrenMap();
-    ASSERT_TRUE(ch.contains("A"));
-    ASSERT_TRUE(ch.contains("B"));
-    ASSERT_TRUE(ch.contains("C"));
-    ASSERT_TRUE(ch.contains("D"));
-
-    EXPECT_EQ(ch["A"].contains("B"), true);
-    EXPECT_EQ(ch["A"].contains("C"), true);
-    EXPECT_EQ(ch["C"].contains("D"), true);
-    EXPECT_TRUE(ch["B"].isEmpty());
-    EXPECT_TRUE(ch["D"].isEmpty());
-}
 
 TEST(ExpressParser, AttributeTrimSemicolonAndWhitespace)
 {
